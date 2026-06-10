@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar sesión — Kiana CR</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+  <style>
+    /* ── Estilos específicos del Login ── */
+    body {
+      background: linear-gradient(135deg, var(--rosa) 0%, var(--papaya) 40%, var(--amarillo) 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 420px;
+      animation: aparecer 0.5s ease;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Logo centrado encima del card */
+    .login-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+      text-decoration: none;
+    }
+    .login-logo .logo-icon {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, var(--rosa-deep), var(--papaya-deep));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.7rem;
+      box-shadow: 0 4px 16px rgba(255,133,161,0.4);
+    }
+    .login-logo .logo-text {
+      font-family: var(--font-titulo);
+      font-weight: 900;
+      font-size: 2rem;
+      color: var(--gris-dark);
+      letter-spacing: -0.5px;
+    }
+    .login-logo .logo-text span { color: var(--rosa-deep); }
+
+    /* Card principal */
+    .login-card {
+      background: var(--blanco);
+      border-radius: var(--radius);
+      padding: 2.4rem 2rem;
+      box-shadow: 0 12px 40px rgba(180,140,160,0.25);
+    }
+
+    .login-card h1 {
+      font-family: var(--font-titulo);
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: var(--gris-dark);
+      margin-bottom: 0.3rem;
+      text-align: center;
+    }
+    .login-card .subtitulo {
+      text-align: center;
+      color: var(--gris-texto);
+      font-size: 0.9rem;
+      margin-bottom: 1.8rem;
+    }
+
+    /* Campos del formulario */
+    .campo { margin-bottom: 1.2rem; }
+    .campo label {
+      display: block;
+      font-family: var(--font-titulo);
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--gris-texto);
+      margin-bottom: 0.4rem;
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .input-wrap span {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    .campo input {
+      width: 100%;
+      padding: 0.78rem 1rem 0.78rem 2.8rem;
+      border: 2px solid #e8e0e8;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transicion);
+      background: var(--gris-claro);
+    }
+    .campo input:focus  { border-color: var(--rosa-deep); background: var(--blanco); }
+    .campo input.valido   { border-color: var(--verde-deep); }
+    .campo input.invalido { border-color: #ff6b8a; }
+
+    /* Toggle mostrar contraseña */
+    .btn-ojo {
+      position: absolute;
+      right: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 0.2rem;
+      transition: var(--transicion);
+    }
+    .btn-ojo:hover { transform: translateY(-50%) scale(1.15); }
+
+    .mensaje-error {
+      display: none;
+      font-size: 0.8rem;
+      color: #e05070;
+      font-weight: 600;
+      margin-top: 0.35rem;
+    }
+    .mensaje-error.visible { display: block; }
+
+    /* Recordarme */
+    .recordar-fila {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      font-size: 0.88rem;
+    }
+    .recordar-fila label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--gris-texto);
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .recordar-fila input[type="checkbox"] {
+      accent-color: var(--rosa-deep);
+      width: 16px; height: 16px;
+    }
+    .link-olvidaste {
+      color: var(--rosa-deep);
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: var(--transicion);
+    }
+    .link-olvidaste:hover { color: var(--papaya-deep); text-decoration: underline; }
+
+    /* Botón principal */
+    .btn-login {
+      width: 100%;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 50px;
+      font-family: var(--font-titulo);
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transicion);
+      background: linear-gradient(135deg, var(--rosa-deep), var(--papaya-deep));
+      color: var(--blanco);
+      box-shadow: 0 4px 16px rgba(255,133,161,0.35);
+      letter-spacing: 0.3px;
+    }
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255,133,161,0.45);
+    }
+    .btn-login:active { transform: translateY(0); }
+
+    /* Alerta de feedback */
+    .alerta-login {
+      display: none;
+      padding: 0.9rem 1.1rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-titulo);
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 1.2rem;
+      animation: aparecer 0.3s ease;
+      text-align: center;
+    }
+    .alerta-login.error  { display: block; background: #ffe0e6; color: #c0334d; }
+    .alerta-login.exito  { display: block; background: var(--verde); color: var(--gris-dark); }
+
+    /* Divisor */
+    .divisor {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin: 1.4rem 0;
+      color: var(--gris-texto);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .divisor::before, .divisor::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e8e0e8;
+    }
+
+    /* Registro */
+    .registro-link {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--gris-texto);
+      margin-top: 1.2rem;
+    }
+    .registro-link a {
+      color: var(--rosa-deep);
+      font-weight: 800;
+      transition: var(--transicion);
+    }
+    .registro-link a:hover { color: var(--papaya-deep); text-decoration: underline; }
+
+    /* Badge bribri */
+    .badge-bribri {
+      text-align: center;
+      margin-top: 1.8rem;
+      font-size: 0.8rem;
+      color: rgba(61,61,85,0.6);
+      font-style: italic;
+    }
+
+    /* Demo hint */
+    .demo-hint {
+      background: var(--amarillo);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      font-size: 0.82rem;
+      color: var(--gris-texto);
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+    }
+    .demo-hint strong { color: var(--gris-dark); font-family: var(--font-titulo); }
+
+    @media (max-width: 480px) {
+      .login-card { padding: 2rem 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-wrapper">
+
+    <!-- Logo -->
+    <a href="index.html" class="login-logo">
+      <div class="logo-icon">🐾</div>
+      <span class="logo-text">Kiana<span>CR</span></span>
+    </a>
+
+    <!-- Card de login -->
+    <div class="login-card">
+      <h1>¡Bienvenida de vuelta!</h1>
+      <p class="subtitulo">Iniciá sesión para gestionar tus solicitudes de adopción</p>
+
+      <!-- Hint de demo -->
+      <div class="demo-hint">
+        💡 <strong>Cuenta de prueba:</strong><br>
+        Correo: <strong>kiana@kianacr.com</strong> · Contraseña: <strong>Kiana2024</strong>
+      </div>
+
+      <!-- Alerta de feedback -->
+      <div class="alerta-login" id="alerta-login" role="alert"></div>
+
+      <!-- Campo correo -->
+      <div class="campo">
+        <label for="correo">Correo electrónico</label>
+        <div class="input-wrap">
+          <span>📧</span>
+          <input
+            type="email"
+            id="correo"
+            placeholder="tucorreo@ejemplo.com"
+            autocomplete="email"
+            aria-required="true"
+          />
+        </div>
+        <span class="mensaje-error" id="error-correo" role="alert">Ingresá un correo electrónico válido.</span>
+      </div>
+
+      <!-- Campo contraseña -->
+      <div class="campo">
+        <label for="contrasena">Contraseña</label>
+        <div class="input-wrap">
+          <span>🔒</span>
+          <input
+            type="password"
+            id="contrasena"
+            placeholder="Tu contraseña"
+            autocomplete="current-password"
+            aria-required="true"
+          />
+          <button class="btn-ojo" id="btn-ojo" type="button" aria-label="Mostrar u ocultar contraseña">👁️</button>
+        </div>
+        <span class="mensaje-error" id="error-contrasena" role="alert">La contraseña debe tener al menos 6 caracteres.</span>
+      </div>
+
+      <!-- Recordarme + olvidé contraseña -->
+      <div class="recordar-fila">
+        <label>
+          <input type="checkbox" id="recordar" />
+          Recordarme
+        </label>
+        <a href="#" class="link-olvidaste" id="link-olvidaste">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <!-- Botón iniciar sesión -->
+      <button class="btn-login" id="btn-login" type="button">
+        🐾 Iniciar sesión
+      </button>
+
+      <div class="divisor">o</div>
+
+      <p class="registro-link">
+        ¿Primera vez aquí?
+        <a href="registro.html">Registrá tu solicitud de adopción →</a>
+      </p>
+    </div>
+
+    <p class="badge-bribri">🌿 <em>Ye'Ki be'Kiana</em> — "Yo te quiero" en bribri</p>
+
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>
